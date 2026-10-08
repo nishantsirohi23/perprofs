@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+
+:root {
+  --paper: #f6f4ef;
+  --ink: #101311;
+  --forest: #123d2b;
+  --citrus: #d9ff57;
+  --clay: #db5c36;
+  --edge: rgba(16, 19, 17, 0.11);
+  --grid: rgba(16, 19, 17, 0.05);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  color-scheme: light only;
+}
+
+/* Lenis owns the scroll position; keep native smooth scrolling out of it. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--citrus);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+
+/* ---------------- typography ---------------- */
+.display {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+}
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+.balance {
+  text-wrap: balance;
+}
+/* wrapper that clips a child being lifted in by GSAP */
+.mask {
+  display: block;
+  overflow: hidden;
+}
+
+/* ---------------- surfaces ---------------- */
+.grid-bg {
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.dot-bg {
+  background-image: radial-gradient(rgba(16, 19, 17, 0.13) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.paper-card {
+  background: linear-gradient(180deg, #fffefb 0%, #f7f5f0 100%);
+  border: 1px solid var(--edge);
+}
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.hairline {
+  border-color: var(--edge);
+}
+
+/* ---------------- deck / PPT stage ---------------- */
+.stage-perspective {
+  perspective: 1900px;
+  perspective-origin: 50% 40%;
+}
+.preserve3d {
+  transform-style: preserve-3d;
+}
+.slide {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+.slide-sheen {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 34%,
+    rgba(255, 255, 255, 0.5) 48%,
+    rgba(255, 255, 255, 0) 62%
+  );
+}
+
+/* ---------------- utility ---------------- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.36;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.3'/></svg>");
+}
+
+/* scroll cue: a short line travelling down its track */
+@keyframes cue {
+  0% {
+    transform: translateY(-110%);
+  }
+  100% {
+    transform: translateY(260%);
+  }
+}
+.scroll-cue {
+  animation: cue 2.3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/*
+ * Utilities come last on purpose: the helpers above are single-class, so at
+ * equal specificity source order decides. This lets a Tailwind class override
+ * a helper at the call site — `mask inline-block` in SplitText keeps its
+ * inline layout, and `eyebrow text-[0.5rem]` keeps the smaller size.
+ */
+@tailwind utilities;
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
